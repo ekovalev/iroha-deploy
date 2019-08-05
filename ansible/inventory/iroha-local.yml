@@ -1,0 +1,10 @@
+all:
+  children:
+    stage1:
+      hosts:
+        tag_name_iroha_expand1:
+          ansible_user: eugene
+          ansible_host: docker.for.mac.localhost
+        tag_name_iroha_expand2:
+          ansible_user: eugene
+          ansible_host: docker.for.mac.localhost

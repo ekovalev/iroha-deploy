@@ -1,0 +1,30 @@
+version: '3'
+services:
+  ansible:
+    image: iroha-ansible
+    # entrypoint: /bin/bash -c "while :; do echo 'Hit CTRL+C'; sleep 5; done"
+    entrypoint: /bin/bash -c "cd /ansible && ansible-playbook -i inventory/iroha-local.yml playbooks/iroha-expand/main.yml"
+    volumes:
+      - ./ansible:/ansible
+      - /Users/eugene/.ssh:/root/.ssh
+      - ./:/opt/iroha-deploy
+
+  py-client:
+    # name: "iroha_command"
+    image: "python:stretch"
+    networks:
+        - iroha-net
+    entrypoint: /bin/bash -c "while :; do echo 'Hit CTRL-C'; sleep 5; done"
+    volumes:
+      - ./ansible/roles/iroha-docker/files:/opt/iroha-deploy:ro
+    command:
+      - "pip3 install iroha &>/dev/null"
+    environment:
+      IROHA_HOSTS: "iroha-0:50051,iroha-1:50051,iroha-2:50051"
+      IROHA_ACCOUNT: "admin@nbc"
+      IROHA_ACCOUNT_KEYS: "72a9eb49c0cd469ed64f653e33ffc6dde475a6b9fd8be615086bce7c44b5a8f8"
+
+networks:
+  iroha-net:
+    external:
+      name: iroha-net

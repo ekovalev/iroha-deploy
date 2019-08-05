@@ -1,0 +1,8 @@
+- hosts:
+    - tag_name_iroha_expand1
+    # - tag_name_iroha_expand2
+  strategy: linear
+  gather_facts: no
+  roles:
+    - { role: iroha-docker }
+  become: true

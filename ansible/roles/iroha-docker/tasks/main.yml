@@ -3,7 +3,7 @@
     state: absent
     remove_volumes: yes
     project_src: "{{ iroha_deploy_dir }}"
-  failed_when: False
+  failed_when: false
   tags: ["iroha-docker"]
 
 - name: delete deploy dir

@@ -1,0 +1,10 @@
+#IROHA
+iroha_replicas: 2
+iroha_custom_hostnames: false
+iroha_hostnames:
+  - "iroha-expand2.dev.internal"
+  - "iroha-expand2.dev.internal"
+
+
+# kafka_host: 'iroha-expand2.dev.internal'
+# kafka_zookeeper_host: 'iroha-expand2.dev.internal'

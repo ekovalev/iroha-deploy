@@ -11,7 +11,8 @@
 
   - name: generate hostnames (overlay)
     set_fact:
-      iroha_nodes: "{{ iroha_nodes }} + [ '{{ iroha_container_basename }}-{{ item }}-{{ inventory_hostname | checksum | regex_replace('(^[a-fA-F0-9]{8}).+$', '\\1') }}:{{ iroha_peer_port }}' ]"
+      # iroha_nodes: "{{ iroha_nodes }} + [ '{{ iroha_container_basename }}-{{ item }}-{{ inventory_hostname | checksum | regex_replace('(^[a-fA-F0-9]{8}).+$', '\\1') }}:{{ iroha_peer_port }}' ]"
+      iroha_nodes: "{{ iroha_nodes }} + [ '{{ iroha_container_basename }}-{{ item }}:{{ iroha_peer_port }}' ]"
     loop: "{{ range(0, iroha_replicas) | list }}"
     when: not iroha_custom_hostnames and iroha_overlay_network
 

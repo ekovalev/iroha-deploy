@@ -3,6 +3,6 @@
 - name: restart Iroha
   docker_service:
     project_src: "{{ iroha_deploy_dir }}"
-    pull: yes
+    # pull: yes
     state: present
     recreate: always

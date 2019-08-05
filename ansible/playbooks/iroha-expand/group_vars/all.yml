@@ -1,0 +1,14 @@
+#IROHA
+iroha_docker_tag: "1.0.1"
+iroha_postgres_docker_tag: '9.5'
+iroha_deploy_dir: "/opt/iroha-deploy"
+iroha_overlay_network: true
+iroha_custom_genesis_block: "true"
+iroha_custom_genesis_block_path: "{{ playbook_dir }}/files/genesis.block"
+iroha_docker_mem_limit: "1024m"
+#iroha_mst_enable: "true"
+iroha_stale_stream_max_rounds: 100
+iroha_vote_delay: 500
+iroha_log_debug: True
+
+ansible_python_interpreter: /usr/local/bin/python3

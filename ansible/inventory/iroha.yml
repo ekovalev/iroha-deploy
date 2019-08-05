@@ -1,0 +1,10 @@
+all:
+  children:
+    stage1:
+      hosts:
+        tag_name_iroha_expand1:
+          ansible_user: ekovalev
+          ansible_host: iroha-expand1.dev.iroha.tech
+        tag_name_iroha_expand2:
+          ansible_user: ekovalev
+          ansible_host: iroha-expand2.dev.iroha.tech

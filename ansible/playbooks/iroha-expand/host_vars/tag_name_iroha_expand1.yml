@@ -1,0 +1,12 @@
+#IROHA
+iroha_replicas: 3
+iroha_custom_hostnames: false
+iroha_hostnames:
+  - "iroha-expand1.dev.internal"
+  - "iroha-expand1.dev.internal"
+  - "iroha-expand1.dev.internal"
+
+
+iroha_service_host: True
+iroha_service_account: 'admin@nbc'
+iroha_service_account_keys: ['72a9eb49c0cd469ed64f653e33ffc6dde475a6b9fd8be615086bce7c44b5a8f8']
