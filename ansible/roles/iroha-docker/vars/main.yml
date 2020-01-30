@@ -1,0 +1,193 @@
+#IROHA SETTINGS
+# Using locally pre-build docker image; change to 'true' to pull from Dockerhub
+iroha_docker_image_pull: false
+iroha_docker_image: 'iroha-burrow'
+iroha_docker_tag: 'latest'
+
+iroha_postgres_docker_image: 'postgres' 
+iroha_postgres_docker_tag: '9.5'
+
+iroha_deploy_dir: "/opt/iroha-deploy"
+
+# Iroha network type for local deployment
+iroha_network: internal
+iroha_network_name: iroha-net
+
+# Iroha config options
+iroha_docker_mem_limit: "1024m"
+iroha_mst_enable: "false"
+iroha_stale_stream_max_rounds: 100
+iroha_vote_delay: 500
+iroha_log_debug: true
+
+# set this to empty line (e.g "") to store blocks in postgres instead of file system (iroha 1.2.0+)
+iroha_blockstore_path: /tmp/block_store
+
+
+# DEPLOYMENT SETTINGS
+
+ansible_python_interpreter: /usr/bin/python3
+
+# Set the number of Iroha peers (default is 4)
+iroha_replicas: 3
+
+# If set to `true`, will fully clean ALL existing Iroha data before deployment process.
+# All peer keys, blockstore, configs will be DELETED!
+# For testing better have the network deployed afresh every time
+iroha_forced_cleaning: true
+
+# Override these if you want to run Iroha commands via ansible
+# The account name must correspond the one of an account with a necessary set of roles in the genesis.block below
+# The key is the corresponding private key (paired with the public one from the genesis.block)
+iroha_service_host: true
+iroha_service_account: admin@test
+iroha_service_account_keys: [ '72a9eb49c0cd469ed64f653e33ffc6dde475a6b9fd8be615086bce7c44b5a8f8' ]
+
+# Iroha Genesis Block
+# The role will replace peers keys with generated values while preserving everything else
+# The generated keys will be placed in the file under {{ iroha_peer_keys_file }} path
+# Things to remember for the genesis.block to be suitable for an EVM configuration:
+#   # there is an 'evm' role with 'root' permission
+#   # there is an 'evm' domain
+#   # there is a user 'evm@evm' with the 'evm' role enabled (either as the default role for 'evm' domain or
+#     enabled for this user separately)
+#   # the public key for the 'evm@evm' user can be an arbitrary 32-bit string and better not have a corresponding private key
+iroha_genesis_block: '
+  {
+    "block_v1":{
+      "payload":{
+        "height":"1",
+        "prevBlockHash":"0000000000000000000000000000000000000000000000000000000000000000",
+        "transactions":[
+        {
+          "payload":{
+            "reducedPayload":{
+              "commands":[
+              {
+                "createRole":{
+                  "permissions":[
+                    "can_add_peer",
+                    "can_add_signatory",
+                    "can_create_account",
+                    "can_create_domain",
+                    "can_get_all_acc_ast",
+                    "can_get_all_acc_ast_txs",
+                    "can_get_all_acc_detail",
+                    "can_get_all_acc_txs",
+                    "can_get_all_accounts",
+                    "can_get_all_signatories",
+                    "can_get_all_txs",
+                    "can_get_blocks",
+                    "can_get_roles",
+                    "can_read_assets",
+                    "can_remove_signatory",
+                    "can_set_quorum"
+                  ],
+                  "roleName":"admin"
+                }
+              },
+              {
+                "createRole":{
+                  "permissions":[
+                    "can_add_signatory",
+                    "can_get_my_acc_ast",
+                    "can_get_my_acc_ast_txs",
+                    "can_get_my_acc_detail",
+                    "can_get_my_acc_txs",
+                    "can_get_my_account",
+                    "can_get_my_signatories",
+                    "can_get_my_txs",
+                    "can_grant_can_add_my_signatory",
+                    "can_grant_can_remove_my_signatory",
+                    "can_grant_can_set_my_account_detail",
+                    "can_grant_can_set_my_quorum",
+                    "can_grant_can_transfer_my_assets",
+                    "can_receive",
+                    "can_remove_signatory",
+                    "can_set_quorum",
+                    "can_transfer"
+                  ],
+                  "roleName":"user"
+                }
+              },
+              {
+                "createRole":{
+                  "permissions":[
+                    "can_add_asset_qty",
+                    "can_create_asset",
+                    "can_receive",
+                    "can_transfer"
+                  ],
+                  "roleName":"money_creator"
+                }
+              },
+              {
+                "createRole":{
+                  "permissions":[
+                    "root"
+                  ],
+                  "roleName":"evm"
+                }
+              },
+              {
+                "createDomain":{
+                  "defaultRole":"user",
+                  "domainId":"test"
+                }
+              },
+              {
+                "createDomain":{
+                  "defaultRole":"evm",
+                  "domainId":"evm"
+                }
+              },
+              {
+                "createAsset":{
+                  "assetName":"coin",
+                  "domainId":"test",
+                  "precision":2
+                }
+              },
+              {
+                "createAccount":{
+                  "accountName":"admin",
+                  "domainId":"test",
+                  "publicKey":"4a60a53785ab3aeed09fc57c9360c37597ded473efda0826bace79aa08522e48"
+                }
+              },
+              {
+                "createAccount":{
+                  "accountName":"test",
+                  "domainId":"test",
+                  "publicKey":"53123b4d1805f172be610deabb259b17deddd98134259cd80c8b9c7699fc683a"
+                }
+              },
+              {
+                "createAccount":{
+                  "accountName":"evm",
+                  "domainId":"evm",
+                  "publicKey":"8f47b801d8f8cc43fe899748d02b21e0e89b3d4b461ec5235dd82e08c69dc545"
+                }
+              },
+              {
+                "appendRole":{
+                  "accountId":"admin@test",
+                  "roleName":"admin"
+                }
+              },
+              {
+                "appendRole":{
+                  "accountId":"admin@test",
+                  "roleName":"money_creator"
+                }
+              }
+              ],
+              "quorum":1
+            }
+          }
+        }
+        ],
+        "txNumber":1
+      }
+    }
+  }'
